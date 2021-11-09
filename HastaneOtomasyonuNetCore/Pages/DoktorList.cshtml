@@ -1,0 +1,133 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div id="app">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <h3>DOKTOR KAYIT</h3>
+    <component1></component1>
+</div>
+<template id="templateId">
+    <div>
+        <input style="width:50%" class="form-control" placeholder="Doktor Adı" v-model="doktorAdi" />
+        <hr style="border: none;"  />
+        <input style="width:50%"  class="form-control" placeholder="Doktor Soyadı" v-model="doktorSoyadi" />
+        <hr style="border: none;"  />
+        <input style="width:50%"  class="form-control" placeholder="Doktor Tc No" v-model="doktorTcNo" />
+        <hr style="border: none;"  />
+        <button v-show="editMode===false" class="btn btn-primary" style="width:100px" v-on:click="addDoktor">Add</button>
+
+        <button v-show="editMode" class="btn btn-dark" style="width:100px" v-on:click="saveEditDoktor">Save</button>
+        <button v-show="editMode" class="btn btn-info" style="width:100px" v-on:click="cancelEdit">Cancel</button>
+
+        <hr  />
+        <hr  />
+
+
+        <table class="table table-bordered display nowrap">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Doktor Adı</td>
+                    <td>Doktor Soyadı</td>
+                    <td>Doktor TcNo</td>
+                    <td>İşlemler</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(doktor,index) in doktorlar">
+                    <th scope="row">
+                        <label>{{index+1}}</label>
+                    </th>
+                    <td>{{doktor.doktorAdi}}</td>
+                    <td>{{doktor.doktorSoyadi}}</td>
+                    <td>{{doktor.doktorTcNo}}</td>
+                    <td>
+                        <button class="btn btn-primary" style="width:100px" v-on:click="editDoktor(doktor)">Edit</button> |
+                        <button class="btn btn-danger" style="width:100px" v-on:click="deleteDoktor(doktor.id)">Delete</button>
+                    </td>
+
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+@section scripts
+
+{
+    <script src="~/lib/vue/vue.js"></script>
+    <script>
+        Vue.component("component1", {
+            data() {
+                return {
+                    doktorlar: [],
+                    doktorAdi: "",
+                    doktorSoyadi: "",
+                    doktorTcNo: "",
+                    id: "",
+                    editMode: false
+                }
+            },
+            methods: {
+
+            addDoktor: function () {
+                thisDoktor = this;
+                var yeniDoktor = {
+                    doktorAdi: thisDoktor.doktorAdi,
+                    doktorSoyadi: thisDoktor.doktorSoyadi,
+                    doktorTcNo: thisDoktor.doktorTcNo
+                    }
+                    axios.post("http://localhost:5000/api/doktor/Create", yeniDoktor)
+                    .then(res => this.doktorlar = res.data)
+                    .catch(err => console.log(err))
+                },
+            editDoktor: function (doktor) {
+                this.doktorAdi = doktor.doktorAdi;
+                this.doktorSoyadi = doktor.doktorSoyadi;
+                this.doktorTcNo = doktor.doktorTcNo;
+                this.id = doktor.id;
+                this.editMode = true;
+            },
+            saveEditDoktor: function () {
+                self = this;
+                var yeniDoktor = {
+                    doktorAdi: self.doktorAdi,
+                    doktorSoyadi: self.doktorSoyadi,
+                    doktorTcNo: self.doktorTcNo,
+                    id: self.id
+                }
+                axios.post("http://localhost:5000/api/doktor/Update", yeniDoktor)
+                    .then(res => this.doktorlar = res.data)
+                    .catch(err => console.log(err))
+            },
+            deleteDoktor: function (id) {
+                self = this;
+
+                axios.post("http://localhost:5000/api/doktor/Delete?id=" + id)
+                    .then(res => this.doktorlar = res.data)
+                    .catch(err => console.log(err))
+            }
+            ,
+            cancelEdit: function () {
+                this.doktorAdi = "";
+                this.doktorSoyadi = "";
+                this.doktorTcNo = "";
+                this.editMode = false;
+                }
+            },
+            created() {
+                axios.get("http://localhost:5000/api/doktor")
+                    .then(res => this.doktorlar = res.data)
+                    .catch(err => console.log(err))
+            },
+            template: '#templateId'
+        })
+        var app = new Vue({
+            el: "#app",
+            data: {
+            }
+        })
+    </script>
+}

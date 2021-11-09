@@ -1,0 +1,124 @@
+﻿@page
+@model HastaneOtomasyonuNetCore.Pages.HastaneListModel
+@{
+}
+
+<div id="app">
+    <h3>HASTANE KAYIT</h3>
+    <component1></component1>
+</div>
+<template id="templateId">
+    <div>
+        <input style="width:50%" class="form-control" placeholder="Hastane Adı" v-model="hastaneAdi" />
+        <hr style="border: none;" />
+        <input style="width:50%" class="form-control" placeholder="Hastane Adres" v-model="hastaneAdres" />
+        <hr style="border: none;" />
+
+        <button v-show="editMode===false" class="btn btn-primary" style="width:100px" v-on:click="addHastane">Add</button>
+
+        <button v-show="editMode" class="btn btn-dark" style="width:100px" v-on:click="saveEditHastane">Save</button>
+        <button v-show="editMode" class="btn btn-info" style="width:100px" v-on:click="cancelEdit">Cancel</button>
+
+        <hr />
+        <hr />
+
+
+        <table class="table table-bordered display nowrap">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Hastane Adı</td>
+                    <td>Hastane Adres</td>
+                    <td>İşlemler</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(hastane,index) in hastaneler">
+                    <th scope="row">
+                        <label>{{index+1}}</label>
+                    </th>
+                    <td>{{hastane.hastaneAdi}}</td>
+                    <td>{{hastane.hastaneAdres}}</td>
+                    <td>
+                        <button class="btn btn-primary" style="width:100px" v-on:click="editHastane(hastane)">Edit</button> |
+                        <button class="btn btn-danger" style="width:100px" v-on:click="deleteHastane(hastane.id)">Delete</button>
+                    </td>
+
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+@section scripts
+
+{
+    <script src="~/lib/vue/vue.js"></script>
+    <script>
+        Vue.component("component1", {
+            data() {
+                return {
+                    hastaneler: [],
+                    hastaneAdi: "",
+                    hastaneAdres: "",
+                    id: "",
+                    editMode: false
+                }
+            },
+            methods: {
+
+                addHastane: function () {
+                    thisHastane = this;
+                    var yeniHastane = {
+                        hastaneAdi: thisHastane.hastaneAdi,
+                        hastaneAdres: thisHastane.hastaneAdres
+                    }
+                    axios.post("http://localhost:5000/api/hastane/Create", yeniHastane)
+                        .then(res => this.hastaneler = res.data)
+                        .catch(err => console.log(err))
+                },
+                editHastane: function (hastane) {
+                    this.hastaneAdi = hastane.hastaneAdi;
+                    this.hastaneAdres = hastane.hastaneAdres;
+                    this.id = hastane.id;
+                    this.editMode = true;
+                },
+                saveEditHastane: function () {
+                    self = this;
+                    var yeniHastane = {
+                        hastaneAdi: self.hastaneAdi,
+                        hastaneAdres: self.hastaneAdres,
+                        id: self.id
+                    }
+                    axios.post("http://localhost:5000/api/hastane/Update", yeniHastane)
+                        .then(res => this.hastaneler = res.data)
+                        .catch(err => console.log(err))
+                },
+                deleteHastane: function (id) {
+                    self = this;
+
+                    axios.post("http://localhost:5000/api/hastane/Delete?id=" + id)
+                        .then(res => this.hastaneler = res.data)
+                        .catch(err => console.log(err))
+                }
+                ,
+                cancelEdit: function () {
+                    this.hastaneAdi = "";
+                    this.hastaneAdres = "";
+                    this.editMode = false;
+                }
+            },
+            created() {
+                axios.get("http://localhost:5000/api/hastane")
+                    .then(res => this.hastaneler = res.data)
+                    .catch(err => console.log(err))
+            },
+            template: '#templateId'
+        })
+        var app = new Vue({
+            el: "#app",
+            data: {
+            }
+        })
+    </script>
+}

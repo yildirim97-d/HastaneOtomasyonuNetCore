@@ -1,0 +1,64 @@
+﻿@page
+@model HastaneOtomasyonuNetCore.Pages.DoktorHastaneListModel
+@{
+}
+
+
+
+
+<div id="app">
+    <h3>Doktor Hastane KAYIT</h3>
+    <component1></component1>
+    
+</div>
+<template id="templateId">
+
+
+    <div>
+
+
+        <input style="width:50%" class="form-control" placeholder="Doktor Tc" v-model="" />
+        <hr style="border: none;" />
+        <select style="width:50%" class="custom-select" multiple>
+            <option v-for="(hastane,index) in hastaneler" v-bind:value="hastane.id">{{hastane.hastaneAdi}}</option>
+
+        </select>
+        <hr style="border: none;" />
+
+        <button v-show="editMode===false" class="btn btn-primary" style="width:100px" v-on:click="addHastane">Add</button>
+
+        <button v-show="editMode" class="btn btn-dark" style="width:100px" v-on:click="saveEditHastane">Save</button>
+        <button v-show="editMode" class="btn btn-info" style="width:100px" v-on:click="cancelEdit">Cancel</button>
+
+        <hr />
+        <hr />
+
+
+
+
+
+       
+
+
+    </div>
+</template>
+@section scripts
+
+{
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="~/lib/vue/vue.js"></script>
+    
+}
+
+
+
+
+
+
+
+
+
+

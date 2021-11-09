@@ -1,0 +1,130 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Hastane Otomasyonuna Hoşgeldiniz</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div id="app">
+        <component1></component1>
+        {{message}}
+
+    </div>
+    <template id="tamplatedId">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Doktor Adı</th>
+                    <th scope="col">Doktor Soyadı</th>
+                    <th scope="col">Doktor Tc No</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(doktor,index) in doktorlar">
+                    <th scope="row"></th>
+                    <td>
+                        {{doktor.doktorAdi}}
+                    </td>
+                    <td>
+                        {{doktor.doktorSoyadi}}
+                    </td>
+                    <td>
+                        {{doktor.doktorTcNo}}
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    @section scripts
+    {
+        <script>
+
+            Vue.component("component1", {
+                data() {
+                    return {
+                        doktorlar: []
+                    }
+                },
+                created() {
+                    axios.get("https://localhost:44347/api/doktorlar")
+                        .then(res => this.doktorlar = res.data)
+                        .catch(err => console.log(err))
+                },
+                template: '#tamplatedId'
+            })
+
+
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    message: "Hello from Vue"
+                }
+
+
+
+            })
+
+        </script>
+
+    }*@
+
